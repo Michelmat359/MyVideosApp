@@ -14,11 +14,12 @@ import { MemoryVideosService } from './services/memory-videos.service';
 
 import { Camera } from '@ionic-native/camera/ngx';
 
+import { VideoEditorPageModule } from './video-editor/video-editor.module';
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, VideoEditorPageModule],
   providers: [
     StatusBar,
     SplashScreen,
