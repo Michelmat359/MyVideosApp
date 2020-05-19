@@ -16,6 +16,7 @@ export class MemoryVideosService extends VideosService {
       resolve(_videos);
     });
   }
+
   findVideoById(id: string): Promise<Video> {
     console.log(`[MemoryVideosService] findVideoById(${id})`);
     var index = this.videos.findIndex((video) => video.id === id);
@@ -23,6 +24,7 @@ export class MemoryVideosService extends VideosService {
       resolve((index === -1) ? null : this.clone(this.videos[index]));
     });
   }
+
   addVideo(video: Video): Promise<Video> {
     console.log('[MemoryVideosService] addVideo(' + JSON.stringify(video) +
       ')');
@@ -31,6 +33,7 @@ export class MemoryVideosService extends VideosService {
     this.videos.push(_video);
     return new Promise((resolve, reject) => resolve(this.clone(_video)));
   }
+
   removeVideo(id: string): Promise<void> {
     console.log(`[MemoryVideosService] removeVideo(${id})`);
     var index = this.videos.findIndex((video) => video.id === id);
@@ -42,6 +45,7 @@ export class MemoryVideosService extends VideosService {
 {id} not found`)));
     }
   }
+  
   updateVideo(video: Video): Promise<Video> {
     console.log('[MemoryVideosService] updateVideo(' + JSON.stringify(video) +
       ')');
