@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Video } from '../models/video';
 import { VideosService } from '../services/videos.service';
 import { AlertController } from '@ionic/angular';
+import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
 
 
 
@@ -15,7 +16,7 @@ import { AlertController } from '@ionic/angular';
 export class MyVideosPage implements OnInit {
   private query = '';
   private myVideos: Video[] = [];
-  constructor(private videos: VideosService, private alertCtrl: AlertController) { }
+  constructor(private videos: VideosService, private alertCtrl: AlertController, private camera: Camera, ) { }
 
 
   ngOnInit() {
@@ -52,10 +53,34 @@ export class MyVideosPage implements OnInit {
         ]
       });
     await prompt.present();
+
   }
+
+  selectVideo() {
+    console.log('[MyVideosPage] selectVideo()');
+    const options: CameraOptions = {
+      sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
+      destinationType: this.camera.DestinationType.FILE_URI,
+      mediaType: this.camera.MediaType.VIDEO
+    };
+    this.camera.getPicture(options)
+      .then((url) => {
+        this.addVideo('file://' + url);
+      })
+      .catch((err) => {
+        // Handle error
+        this.alertCtrl.create({
+          header: 'Error',
+          message: 'ERROR selecting video: ' + JSON.stringify(err),
+          buttons: ['OK']
+        }).then((alert) => alert.present());
+      });
+  }
+
 
   addVideo(url: string) {
     console.log(`[MyVideosPage] addVideo()`);
-  } //end add video
+    //TERMINAR
+  }
 
 }
