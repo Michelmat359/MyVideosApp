@@ -6,6 +6,8 @@ import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
 import { ModalController } from '@ionic/angular';
 import { VideoEditorPage } from '../video-editor/video-editor.page';
 import { OverlayEventDetail } from '@ionic/core';
+import { ActionSheetController } from '@ionic/angular';
+
 
 
 @Component({
@@ -18,7 +20,7 @@ import { OverlayEventDetail } from '@ionic/core';
 export class MyVideosPage implements OnInit {
   private query = '';
   private myVideos: Video[] = [];
-  constructor(private videos: VideosService, private alertCtrl: AlertController, private camera: Camera, private modalCtrl: ModalController) { }
+  constructor(private videos: VideosService, private alertCtrl: AlertController, private camera: Camera, private modalCtrl: ModalController, public actionSheetCtrl: ActionSheetController) { }
 
 
   ngOnInit() {
@@ -155,6 +157,38 @@ export class MyVideosPage implements OnInit {
       };
       videoNode.src = url;
     });
+  }
+
+  showMenu(video) {
+    this.actionSheetCtrl.create({
+      buttons: [
+        {
+          text: 'Edit',
+          icon: 'create',
+          handler: () => {
+            console.log('Edit video!!');
+            this.editVideo(video);
+          }
+        }]
+    }).then((actionSheet) => actionSheet.present());
+  }
+
+  editVideo(video: Video) {
+    console.log(`[MyVideosPage] editVideo(${video.id})`);
+    this.modalCtrl.create({
+      component: VideoEditorPage,
+      componentProps: { mode: 'edit', video: video }
+    })
+      .then((modal) => {
+        modal.onDidDismiss()
+          .then((evt: OverlayEventDetail) => {
+            if (evt && evt.data) {
+              this.videos.updateVideo(evt.data)
+                .then(() => this.searchVideos());
+            }
+          });
+        modal.present();
+      });
   }
 
 }

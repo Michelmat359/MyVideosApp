@@ -2,10 +2,10 @@
   <ion-toolbar>
     <ion-title>My Videos</ion-title>
   </ion-toolbar>
-  <!-- <ion-toolbar>
+   <ion-toolbar>
     <ion-searchbar [(ngModel)]="query" (ionInput)="searchVideos($event)">
-      </ionsearchbar>
-  </ion-toolbar> -->
+      </ion-searchbar>
+  </ion-toolbar>
 </ion-header>
 <ion-content>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
@@ -30,7 +30,7 @@
         <h3>{{ video.title }}</h3>
         <p *ngIf="video.description">{{ video.description }}</p>
       </ion-label>
-      <ion-button slot="end" fill="clear">
+      <ion-button slot="end" fill="clear" (click)="showMenu(video)">
         <ion-icon name="ellipsis-vertical"></ion-icon>
       </ion-button>
     </ion-item>
