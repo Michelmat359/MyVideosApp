@@ -7,6 +7,8 @@ import { ModalController } from '@ionic/angular';
 import { VideoEditorPage } from '../video-editor/video-editor.page';
 import { OverlayEventDetail } from '@ionic/core';
 import { ActionSheetController } from '@ionic/angular';
+import { VideoPlayerPage } from '../video-player/video-player.page';
+
 
 
 
@@ -20,7 +22,11 @@ import { ActionSheetController } from '@ionic/angular';
 export class MyVideosPage implements OnInit {
   private query = '';
   private myVideos: Video[] = [];
-  constructor(private videos: VideosService, private alertCtrl: AlertController, private camera: Camera, private modalCtrl: ModalController, public actionSheetCtrl: ActionSheetController) { }
+  constructor(private videos: VideosService, 
+    private alertCtrl: AlertController, 
+    private camera: Camera, 
+    private modalCtrl: ModalController, 
+    public actionSheetCtrl: ActionSheetController) { }
 
 
   ngOnInit() {
@@ -163,6 +169,14 @@ export class MyVideosPage implements OnInit {
     this.actionSheetCtrl.create({
       buttons: [
         {
+          text: 'Play',
+          icon: 'play',
+          handler: () => {
+            console.log('Play video!!');
+            this.playVideo(video);}
+
+          },         
+        {
           text: 'Edit',
           icon: 'create',
           handler: () => {
@@ -191,4 +205,11 @@ export class MyVideosPage implements OnInit {
       });
   }
 
+  playVideo(video: Video) {
+    console.log(`[MyVideosPage] playVideo(${video.id})`);
+    this.modalCtrl.create({
+      component: VideoPlayerPage,
+      componentProps: { video: video }
+    }).then((modal) => modal.present());
+  }
 }
