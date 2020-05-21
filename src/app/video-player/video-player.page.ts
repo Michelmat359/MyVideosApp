@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ModalController } from '@ionic/angular';
+
 
 
 @Component({
@@ -9,9 +11,14 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class VideoPlayerPage implements OnInit {
 
-  constructor(private domSanitizer: DomSanitizer) { }
+  constructor(private domSanitizer: DomSanitizer, private modalCtrl: ModalController) { }
 
   ngOnInit() {
+  }
+
+  close() {
+    console.log('[VideoEditorPage] close()');
+    this.modalCtrl.dismiss();
   }
 
 }
