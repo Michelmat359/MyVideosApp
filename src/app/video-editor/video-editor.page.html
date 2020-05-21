@@ -23,6 +23,7 @@
       <ion-label position="floating">Tags</ion-label>
       <ion-input type="text" [readonly]="mode === 'view'" [(ngModel)]="video.tags"></ion-input>
     </ion-item>
+    
   </ion-list>
   <ion-card>
     <ion-fab vertical="top" horizontal="end">
@@ -30,13 +31,13 @@
         <ion-icon name="create"></ion-icon>
       </ion-fab-button>
       <ion-fab-list side="bottom">
-        <ion-fab-button>
+        <ion-fab-button (click)="imageButton()">
           <ion-icon name="images"></ion-icon>
         </ion-fab-button>
-        <ion-fab-button>
+        <ion-fab-button (click)="linkButton()">
           <ion-icon name="link"></ion-icon>
         </ion-fab-button>
-        <ion-fab-button>
+        <ion-fab-button (click)="cameraButton()">
           <ion-icon name="camera"></ion-icon>
         </ion-fab-button>
       </ion-fab-list>

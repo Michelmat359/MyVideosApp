@@ -237,7 +237,9 @@ export class MyVideosPage implements OnInit {
       message: 'Are you sure?',
       buttons: [
         {
-          text: 'Cancel', role: 'cancel', handler: () => {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
             console.log('Cancel clicked');
           }
         },
