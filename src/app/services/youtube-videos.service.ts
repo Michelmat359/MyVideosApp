@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { VideosService } from './videos.service';
 import { Video } from '../models/video';
+import { HttpClient } from '@angular/common/http'
+
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,9 @@ export class YoutubeVideosService extends VideosService {
   private urlBase = 'https://www.googleapis.com/youtube/v3';
   private key = 'AIzaSyCRFbHU4hxGcZ730NBmEDCASu_vQWnb5ZU';
   private maxResults = 25;
-  constructor(private http: HttpClient) { super(); }
+
+  constructor(public http: HttpClient) { super(); }
+
   findVideos(query: string): Promise<Video[]> {
     console.log(`[YoutubeVideosService] findVideos(${query})`);
     return new Promise((resolve, reject) => {

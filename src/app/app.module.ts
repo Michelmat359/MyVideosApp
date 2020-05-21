@@ -21,15 +21,17 @@ import { HttpClientModule } from '@angular/common/http';
 
 
 
+
+
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, VideoEditorPageModule, VideoPlayerPageModule],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, VideoEditorPageModule, HttpClientModule, VideoPlayerPageModule],
   providers: [
     StatusBar,
     SplashScreen,
     Camera,
-    HttpClientModule,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: VideosService, useClass: MemoryVideosService}
   ],
