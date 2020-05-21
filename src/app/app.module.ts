@@ -17,6 +17,9 @@ import { Camera } from '@ionic-native/camera/ngx';
 import { VideoEditorPageModule } from './video-editor/video-editor.module';
 import { VideoPlayerPageModule } from './video-player/video-player.module';
 
+import { HttpClientModule } from '@angular/common/http';
+
+
 
 @NgModule({
   declarations: [AppComponent],
@@ -26,6 +29,7 @@ import { VideoPlayerPageModule } from './video-player/video-player.module';
     StatusBar,
     SplashScreen,
     Camera,
+    HttpClientModule,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: VideosService, useClass: MemoryVideosService}
   ],
