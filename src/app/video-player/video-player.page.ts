@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-video-player',
@@ -7,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class VideoPlayerPage implements OnInit {
 
-  constructor() { }
+  constructor(private domSanitizer: DomSanitizer) { }
 
   ngOnInit() {
   }
