@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Video } from '../models/video';
 import { VideosService } from '../services/videos.service';
 import { AlertController } from '@ionic/angular';
@@ -22,11 +22,12 @@ import { VideoPlayerPage } from '../video-player/video-player.page';
 export class MyVideosPage implements OnInit {
   private query = '';
   private myVideos: Video[] = [];
-  constructor(private videos: VideosService, 
-    private alertCtrl: AlertController, 
-    private camera: Camera, 
-    private modalCtrl: ModalController, 
-    public actionSheetCtrl: ActionSheetController) { }
+  constructor(private videos: VideosService,
+    private alertCtrl: AlertController,
+    private camera: Camera,
+    private modalCtrl: ModalController,
+    public actionSheetCtrl: ActionSheetController,
+    public changes: ChangeDetectorRef) { }
 
 
   ngOnInit() {
@@ -38,7 +39,12 @@ export class MyVideosPage implements OnInit {
     console.log('[MyVideosPage] searchVideos()');
     let query = evt ? evt.target.value.trim() : this.query;
     this.videos.findVideos(query)
-      .then((videos) => this.myVideos = videos);
+      .then((videos) => {
+        this.myVideos = videos
+        console.log('[MyVideosPage] searchVideos() => ' +
+          JSON.stringify(this.myVideos));
+        this.changes.detectChanges();
+      });
   }
 
   async enterVideo() {
@@ -173,9 +179,10 @@ export class MyVideosPage implements OnInit {
           icon: 'play',
           handler: () => {
             console.log('Play video!!');
-            this.playVideo(video);}
+            this.playVideo(video);
+          }
 
-          },         
+        },
         {
           text: 'Edit',
           icon: 'create',
@@ -183,6 +190,16 @@ export class MyVideosPage implements OnInit {
             console.log('Edit video!!');
             this.editVideo(video);
           }
+        },
+        {
+          text: 'Delete',
+          icon: 'trash',
+          handler: () => {
+            console.log('Delete video!!');
+            this.deleteVideo(video);
+          }
+
+
         }]
     }).then((actionSheet) => actionSheet.present());
   }
@@ -212,4 +229,26 @@ export class MyVideosPage implements OnInit {
       componentProps: { video: video }
     }).then((modal) => modal.present());
   }
+
+  deleteVideo(video: Video) {
+    console.log(`[MyVideosPage] deleteVideo(${video.id})`);
+    this.alertCtrl.create({
+      header: 'Delete video',
+      message: 'Are you sure?',
+      buttons: [
+        {
+          text: 'Cancel', role: 'cancel', handler: () => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Accept', handler: () => {
+            this.videos.removeVideo(video.id)
+              .then(() => this.searchVideos());
+          }
+        }
+      ]
+    }).then((alert) => alert.present());
+  }
+
 }
