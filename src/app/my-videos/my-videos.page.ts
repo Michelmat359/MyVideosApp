@@ -8,6 +8,7 @@ import { VideoEditorPage } from '../video-editor/video-editor.page';
 import { OverlayEventDetail } from '@ionic/core';
 import { ActionSheetController } from '@ionic/angular';
 import { VideoPlayerPage } from '../video-player/video-player.page';
+import { PlaylistSelectPage } from "../playlist-select/playlist-select.page";
 
 
 @Component({
@@ -171,34 +172,38 @@ export class MyVideosPage implements OnInit {
 
   showMenu(video) {
     this.actionSheetCtrl.create({
-      buttons: [
-        {
-          text: 'Play',
-          icon: 'play',
-          handler: () => {
-            console.log('Play video!!');
-            this.playVideo(video);
-          }
+      buttons: [{
+        text: "Añadir al playlist",
+        icon: "star",
+        handler: () => {
+          this.addToPlaylist(video);
+        }
+      },
+      {
+        text: 'Play',
+        icon: 'play',
+        handler: () => {
+          console.log('Play video!!');
+          this.playVideo(video);
+        }
 
-        },
-        {
-          text: 'Editar',
-          icon: 'create',
-          handler: () => {
-            console.log('Edit video!!');
-            this.editVideo(video);
-          }
-        },
-        {
-          text: 'Eliminar',
-          icon: 'trash',
-          handler: () => {
-            console.log('Delete video!!');
-            this.deleteVideo(video);
-          }
-
-
-        }]
+      },
+      {
+        text: 'Editar',
+        icon: 'create',
+        handler: () => {
+          console.log('Edit video!!');
+          this.editVideo(video);
+        }
+      },
+      {
+        text: 'Eliminar',
+        icon: 'trash',
+        handler: () => {
+          console.log('Delete video!!');
+          this.deleteVideo(video);
+        }
+      }]
     }).then((actionSheet) => actionSheet.present());
   }
 
@@ -227,6 +232,17 @@ export class MyVideosPage implements OnInit {
       componentProps: { video: video }
     }).then((modal) => modal.present());
   }
+
+  addToPlaylist(video: Video) {
+    console.log(`[MyVideosPage] addToPlaylist(${video.id})`);
+    this.modalCtrl
+      .create({
+        component: PlaylistSelectPage,
+        componentProps: { video: video }
+      })
+      .then(modal => modal.present());
+  }
+
 
   deleteVideo(video: Video) {
     console.log(`[MyVideosPage] deleteVideo(${video.id})`);

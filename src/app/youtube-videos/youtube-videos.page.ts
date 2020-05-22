@@ -53,6 +53,13 @@ showMenu(video) {
     .create({
       buttons: [
         {
+          text: "Añadir al playlist",
+          icon: "star",
+          handler: () => {
+            // this.playVideo(video);
+          }
+        },
+        {
           text: "Play",
           icon: "play",
           handler: () => {

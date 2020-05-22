@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Playlist } from '../models/playlist';
 import { Video } from '../models/video';
+
 @Injectable({
   providedIn: 'root'
 })
+
 export abstract class PlaylistsService {
   abstract findPlaylists(): Promise<Playlist[]>;
   abstract addPlaylist(playlist: Playlist): Promise<Playlist>;
