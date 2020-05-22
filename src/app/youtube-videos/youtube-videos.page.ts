@@ -56,15 +56,13 @@ showMenu(video) {
           text: "Play",
           icon: "play",
           handler: () => {
-            console.log("Play video!!");
             this.playVideo(video);
           }
         },
         {
-          text: "Properties",
-          icon: "information-circle",
+          text: "Información",
+          icon: "information-circle-outline",
           handler: () => {
-            console.log("View video properties!!");
             this.showVideoProperties(video);
           }
         }

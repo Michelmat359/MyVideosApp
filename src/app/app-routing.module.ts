@@ -21,13 +21,10 @@ const routes: Routes = [
   {
     path: 'video-editor',
     loadChildren: () => import('./video-editor/video-editor.module').then( m => m.VideoEditorPageModule)
-  },  {
-    path: 'video-player',
-    loadChildren: () => import('./video-player/video-player.module').then( m => m.VideoPlayerPageModule)
   },
   {
-    path: 'youtube-editor-page',
-    loadChildren: () => import('./youtube-editor-page/youtube-editor-page.module').then( m => m.YoutubeEditorPagePageModule)
+    path: 'video-player',
+    loadChildren: () => import('./video-player/video-player.module').then( m => m.VideoPlayerPageModule)
   }
 
 ];

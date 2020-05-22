@@ -10,8 +10,6 @@ import { ActionSheetController } from '@ionic/angular';
 import { VideoPlayerPage } from '../video-player/video-player.page';
 
 
-
-
 @Component({
   selector: 'app-my-videos',
   templateUrl: './my-videos.page.html',
@@ -51,16 +49,16 @@ export class MyVideosPage implements OnInit {
     console.log('[MyVideosPage] enterVideo()');
     let prompt = await this.alertCtrl.create(
       {
-        header: 'Select video',
-        message: 'Enter video URL',
+        header: 'Seleccionar video',
+        message: 'Introduce URL del video',
         inputs: [{ name: 'url', placeholder: 'URL' }],
         buttons: [{
-          text: 'Cancel', role: 'cancel', handler: () => {
+          text: 'Cancelar', role: 'cancel', handler: () => {
             console.log('Cancel clicked');
           }
         },
         {
-          text: 'Accept',
+          text: 'Acceptar',
           handler: (data) => {
             console.log('URL ' + data.url + ' entered!!');
             this.addVideo(data.url);
@@ -184,7 +182,7 @@ export class MyVideosPage implements OnInit {
 
         },
         {
-          text: 'Edit',
+          text: 'Editar',
           icon: 'create',
           handler: () => {
             console.log('Edit video!!');
@@ -192,7 +190,7 @@ export class MyVideosPage implements OnInit {
           }
         },
         {
-          text: 'Delete',
+          text: 'Eliminar',
           icon: 'trash',
           handler: () => {
             console.log('Delete video!!');
@@ -233,18 +231,18 @@ export class MyVideosPage implements OnInit {
   deleteVideo(video: Video) {
     console.log(`[MyVideosPage] deleteVideo(${video.id})`);
     this.alertCtrl.create({
-      header: 'Delete video',
-      message: 'Are you sure?',
+      header: 'Eliminar video',
+      message: '¿Estás seguro?',
       buttons: [
         {
-          text: 'Cancel',
+          text: 'Cancelar',
           role: 'cancel',
           handler: () => {
             console.log('Cancel clicked');
           }
         },
         {
-          text: 'Accept', handler: () => {
+          text: 'Acceptar', handler: () => {
             this.videos.removeVideo(video.id)
               .then(() => this.searchVideos());
           }
