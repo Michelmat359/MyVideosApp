@@ -14,4 +14,5 @@ export abstract class PlaylistsService {
   abstract addVideo(playlistId: string, video: Video): Promise<void>;
   abstract removeVideo(playlistId: string, videoId: string): Promise<void>;
   abstract listVideos(playlistId: string): Promise<Video[]>;
+  constructor() { }
 }

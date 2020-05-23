@@ -2,21 +2,16 @@
   <ion-toolbar>
     <ion-title>Playlists</ion-title>
   </ion-toolbar>
-  <ion-toolbar>
-    <ion-searchbar [(ngModel)]="query" (ionInput)="searchVideos($event)">
-    </ion-searchbar>
-    
-  </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button (click)="addPlaylist()">
+    <ion-fab-button (click)="addPlaylistV()">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
   <ion-list>
-    <ion-card *ngFor="let playlist of myVideos">
+    <ion-card *ngFor="let playlist of myPlaylists">
       <!-- <ion-card> -->
       <ion-item lines="none">
         <ion-button slot="end" fill="clear" (click)="showMenu(playlist)">
@@ -26,15 +21,15 @@
       
       <img style="display: block; margin: auto;"[src]="playlist.thumbnail ? playlist.thumbnail.url : '/assets/video.png'" />
       <ion-card-header>
-        <ion-card-title> playlist.title </ion-card-title>
+        <ion-card-title> {{playlist.title}} </ion-card-title>
       </ion-card-header>
       <ion-card-content>
-         playlist.description 
+         {{playlist.description}} 
       </ion-card-content>
       <ion-item>
         <ion-button fill="clear" slot="start" >
           <ion-icon slot="start" name="videocam"></ion-icon>
-           playlist.count  Videos
+           {{playlist.count}}  Videos
         </ion-button>
         <ion-button fill="clear" slot="start" >
           <ion-icon slot="start" name="play"></ion-icon>

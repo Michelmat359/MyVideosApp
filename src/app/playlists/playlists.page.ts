@@ -2,11 +2,13 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { VideosService } from '../services/videos.service';
 import { Video } from '../models/video';
 import { ActionSheetController } from '@ionic/angular';
-import { ModalController } from '@ionic/angular'; 
+import { ModalController } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core';
 import { Playlist } from "../models/playlist";
-import { PlaylistEditPage} from '../playlist-edit/playlist-edit.page';
-import { PlaylistsService } from '../services/playlists.service'
+import { PlaylistEditPage } from '../playlist-edit/playlist-edit.page';
+import { PlaylistsService } from '../services/playlists.service';
+import { AlertController } from '@ionic/angular';
+
 
 
 
@@ -18,26 +20,26 @@ import { PlaylistsService } from '../services/playlists.service'
 
 export class PlaylistsPage implements OnInit {
   private query = '';
-  private myVideos: Video[] = [];
-  private myPlaylists: Playlist[];
+  private myPlaylists: Playlist[] = [];
 
-  constructor(private videos: VideosService,
+  constructor(
+    private videos: VideosService,
     private playlists: PlaylistsService,
     public changes: ChangeDetectorRef,
     public actionSheetCtrl: ActionSheetController,
-    private modalCtrl: ModalController) { }
+    private modalCtrl: ModalController,
+    private alertCtrl: AlertController) { }
 
   ngOnInit() {
+    this.searchPlayList();
   }
 
-  searchVideos(evt?) {
-    console.log('[MyPlaylistPage] searchVideos()');
-    let query = evt ? evt.target.value.trim() : this.query;
-    this.videos.findVideos(query)
-      .then((videos) => {
-        this.myVideos = videos
-        console.log('[MyPlaylistPage] searchVideos() => ' +
-          JSON.stringify(this.myVideos));
+  searchPlayList(evt?) {
+    console.log('[MyPlaylistPage] searchPlayList()');
+    this.playlists.findPlaylists()
+      .then((playlists) => {
+        this.myPlaylists = playlists;
+        console.log('[MyPlaylistPage] searchPlayList() => ' + JSON.stringify(this.myPlaylists));
         this.changes.detectChanges();
       });
   }
@@ -64,14 +66,14 @@ export class PlaylistsPage implements OnInit {
             text: "Editar",
             icon: "pencil-outline",
             handler: () => {
-              // this.showVideoProperties(video);
+              this.showPlaylistsProperties(video);
             }
           },
           {
             text: "Eliminar",
             icon: "trash-outline",
             handler: () => {
-              // this.showVideoProperties(video);
+              this.deleteplaylist(video);
             }
           }
         ]
@@ -79,7 +81,7 @@ export class PlaylistsPage implements OnInit {
       .then(actionSheet => actionSheet.present());
   }
 
-  addPlaylist() {
+  addPlaylistV() {
     console.log(`[PlaylistsPage] addPlaylist()`);
     let playlist: Playlist = {
       title: "",
@@ -89,18 +91,69 @@ export class PlaylistsPage implements OnInit {
       count: 0
     };
     //Crear una pagina para Crear playlist y mostrarlo en un modal
+    this.modalCtrl.create({
+      component: PlaylistEditPage,
+      componentProps: { mode: "add", playlist: playlist }
+    })
+      .then((modal) => {
+
+        modal.onDidDismiss()
+          .then((evt: OverlayEventDetail) => {
+            if (evt && evt.data) {
+              console.log(evt.data);
+              this.playlists.addPlaylist(evt.data)
+                .then(() => this.searchPlayList());
+            }
+          });
+        modal.present();
+      });
+
+  }
+
+  showPlaylistsProperties(playlist: Playlist) {
+    console.log(`[PlaylistsPage] showPlaylistsProperties(${playlist.id})`);
     this.modalCtrl
       .create({
         component: PlaylistEditPage,
-        componentProps: { mode: "add", playlist: playlist }
+        componentProps: { mode: "edit", playlist: playlist }
       })
       .then(modal => {
         modal.onDidDismiss().then((evt: OverlayEventDetail) => {
           if (evt && evt.data) {
-                this.playlists.addPlaylist(evt.data);
-              }
-          });
-        modal.present();
+            this.playlists.updatePlaylist(evt.data)
+              .then(() => this.searchPlayList());
+          }
         });
+        modal.present();
+      });
   }
+
+  deleteplaylist(playlist: Playlist) {
+    console.log(`[PlaylistsPage] deleteplaylist(${playlist.id})`);
+    this.alertCtrl
+      .create({
+        header: "Eliminar playList",
+        message: "¿Estas seguro que quieres eliminarlo?",
+        buttons: [
+          {
+            text: "Cancelar",
+            role: "cancel",
+            handler: () => {
+              console.log("Cancel clicked");
+            }
+          },
+          {
+            text: "Aceptar",
+            handler: () => {
+              this.playlists
+                .removePlaylist(playlist.id)
+                .then(() => this.searchPlayList());
+            }
+          }
+        ]
+      })
+      .then(alert => alert.present());
+  }
+
+
 }

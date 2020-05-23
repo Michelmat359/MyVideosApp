@@ -104,6 +104,7 @@ export class MyVideosPage implements OnInit {
           modal.onDidDismiss()
             .then((evt: OverlayEventDetail) => {
               if (evt && evt.data) {
+                console.log(evt.data);
                 this.videos.addVideo(evt.data)
                   .then(() => this.searchVideos());
               }

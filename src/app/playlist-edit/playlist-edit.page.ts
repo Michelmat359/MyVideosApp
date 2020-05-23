@@ -2,7 +2,6 @@ import { Component, OnInit, Input } from "@angular/core";
 import { Playlist } from "../models/playlist";
 import { ModalController } from "@ionic/angular";
 import { AlertController } from '@ionic/angular';
-
 import { CameraOptions, Camera } from "@ionic-native/camera/ngx";
 
 @Component({
@@ -40,16 +39,6 @@ export class PlaylistEditPage implements OnInit {
     this.playlist = this.clone(this.playlist);
   }
 
-  close() {
-    console.log("[PlaylistEditPage] close()");
-    this.modalCtrl.dismiss();
-  }
-
-  save() {
-    console.log("[PlaylistEditPage] save()");
-    this.modalCtrl.dismiss(this.playlist);
-  }
-
   private clone(playlist: Playlist): Playlist {
     return {
       id: playlist.id,
@@ -60,6 +49,19 @@ export class PlaylistEditPage implements OnInit {
       count: playlist.count
     };
   }
+
+  close() {
+    console.log("[PlaylistEditPage] close()");
+    this.modalCtrl.dismiss();
+  }
+
+  save() {
+    console.log("[PlaylistEditPage] save()");
+    console.log(this.playlist);
+    this.modalCtrl.dismiss(this.playlist);
+  }
+
+
 
   imagebutton() {
     //Avatar

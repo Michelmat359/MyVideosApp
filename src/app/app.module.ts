@@ -18,7 +18,8 @@ import { VideoEditorPageModule } from './video-editor/video-editor.module';
 import { VideoPlayerPageModule } from './video-player/video-player.module';
 
 import { HttpClientModule } from '@angular/common/http';
-
+import { PlaylistsService} from './services/playlists.service';
+import { MemoryPlaylistsService } from './services/memory-playlists.service';
 
 
 
@@ -35,8 +36,11 @@ import { HttpClientModule } from '@angular/common/http';
     StatusBar,
     SplashScreen,
     Camera,
+    MemoryVideosService,
+    MemoryPlaylistsService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    { provide: VideosService, useClass: MemoryVideosService}
+    { provide: VideosService, useClass: MemoryVideosService},
+    { provide: PlaylistsService, useClass: MemoryPlaylistsService}
   ],
   bootstrap: [AppComponent]
 })
