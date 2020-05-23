@@ -11,17 +11,12 @@
 
 <ion-content>
   <ion-list>
-    <ion-reorder-group (ionItemReorder)="reorderVideos($event)" disabled="false">
-      <ion-item *ngFor="let video of myVideos">
-        <ion-reorder slot="start"></ion-reorder>
-        <ion-thumbnail slot="start">
-          <img [src]="video.thumbnail ? video.thumbnail.url : '/assets/video.png'" />
-        </ion-thumbnail>
-        <ion-label>
-          <h3>{{ video.title }}</h3>
-          <p *ngIf="video.description">{{ video.description }}</p>
-        </ion-label>
-      </ion-item>
-    </ion-reorder-group>
+    <ion-item *ngFor="let video of myVideos">
+      <video *ngIf="video.type !== 'youtube'" [src]="video.url" autoplay controls
+        style="width: 100%; height: 100%;"></video>
+      <iframe *ngIf="video.type === 'youtube'" style="width: 100%; height: 100%;" id="ytplayer" type="text/html"
+        [src]="domSanitizer.bypassSecurityTrustResourceUrl(video.url)" frameborder="0" width="100%"
+        height="100%"></iframe>
+    </ion-item>
   </ion-list>
 </ion-content>
