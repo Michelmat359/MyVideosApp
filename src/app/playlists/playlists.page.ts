@@ -8,6 +8,7 @@ import { Playlist } from "../models/playlist";
 import { PlaylistEditPage } from '../playlist-edit/playlist-edit.page';
 import { PlaylistsService } from '../services/playlists.service';
 import { AlertController } from '@ionic/angular';
+import { PlaylistVideosPage } from "../playlist-videos/playlist-videos.page";
 
 
 
@@ -52,14 +53,14 @@ export class PlaylistsPage implements OnInit {
             text: "Abrir",
             icon: "folder-open-outline",
             handler: () => {
-              // this.playVideo(video);
+              this.abrirPlaylist(video);
             }
           },
           {
             text: "Play",
             icon: "play",
             handler: () => {
-              // this.playVideo(video);
+              this.playPlaylists(video);
             }
           },
           {
@@ -153,6 +154,20 @@ export class PlaylistsPage implements OnInit {
         ]
       })
       .then(alert => alert.present());
+  }
+
+  playPlaylists(playlist: Playlist) {
+  }
+
+  abrirPlaylist(playlist: Playlist) {
+    this.modalCtrl
+      .create({
+        component: PlaylistVideosPage,
+        componentProps: { playlist: playlist }
+      })
+      .then(modal => {
+        modal.present();
+      });
   }
 
 

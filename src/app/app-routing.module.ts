@@ -32,6 +32,10 @@ const routes: Routes = [
   {
     path: 'playlist-edit',
     loadChildren: () => import('./playlist-edit/playlist-edit.module').then( m => m.PlaylistEditPageModule)
+  },
+  {
+    path: 'playlist-videos',
+    loadChildren: () => import('./playlist-videos/playlist-videos.module').then( m => m.PlaylistVideosPageModule)
   }
 
 

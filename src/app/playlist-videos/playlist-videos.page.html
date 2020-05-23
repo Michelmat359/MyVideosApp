@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>PlaylistVideos {{ playlist.title }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">
+        Close
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-reorder-group (ionItemReorder)="reorderVideos($event)" disabled="false">
+      <ion-item *ngFor="let video of myVideos">
+        <ion-reorder slot="start"></ion-reorder>
+        <ion-thumbnail slot="start">
+          <img [src]="video.thumbnail ? video.thumbnail.url : '/assets/video.png'" />
+        </ion-thumbnail>
+        <ion-label>
+          <h3>{{ video.title }}</h3>
+          <p *ngIf="video.description">{{ video.description }}</p>
+        </ion-label>
+      </ion-item>
+    </ion-reorder-group>
+  </ion-list>
+</ion-content>

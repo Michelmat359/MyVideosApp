@@ -24,6 +24,19 @@ export class PlaylistSelectPage implements OnInit {
     public changes: ChangeDetectorRef ) { }
 
   ngOnInit() {
+    this.searchPlayList();
+  }
+
+  searchPlayList(evt?) {
+    console.log('[MyPlaylistSelectPage] searchPlayList()');
+    this.playlists.findPlaylists()
+      .then((playlists) => {
+        this.myPlaylists = playlists;
+        console.log('[MyPlaylistPage] searchPlayList() => ' + JSON.stringify(this.myPlaylists));
+        this.changes.detectChanges();
+      }).then(_=> {
+        this.close();
+      })
   }
 
   close() {
@@ -48,4 +61,6 @@ export class PlaylistSelectPage implements OnInit {
       });
 
   }
+
+
 }
