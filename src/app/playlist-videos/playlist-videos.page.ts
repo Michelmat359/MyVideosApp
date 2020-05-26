@@ -33,7 +33,7 @@ export class PlaylistVideosPage implements OnInit {
 
   searchVideos(evt?) {
     console.log('[MyVideosPage] searchVideos()');
-    this.playlists.listVideos(evt)
+    this.playlists.listVideos(this.playlist.id)
       .then((playlists) => {
         this.myVideos = playlists;
         console.log('[MyPlaylistPage] searchPlayList() => '+ JSON.stringify(this.myVideos));

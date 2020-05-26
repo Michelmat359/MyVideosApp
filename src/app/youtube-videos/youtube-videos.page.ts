@@ -9,6 +9,8 @@ import { VideoEditorPage } from '../video-editor/video-editor.page';
 import { OverlayEventDetail } from '@ionic/core';
 import { ActionSheetController } from '@ionic/angular';
 import { VideoPlayerPage } from '../video-player/video-player.page';
+import { PlaylistSelectPage } from "../playlist-select/playlist-select.page";
+
 
 
 
@@ -56,7 +58,7 @@ showMenu(video) {
           text: "Añadir al playlist",
           icon: "star",
           handler: () => {
-            // this.playVideo(video);
+            this.playplaylist(video);
           }
         },
         {
@@ -105,4 +107,16 @@ showVideoProperties(video: Video) {
       modal.present();
     });
 }
+
+playplaylist(video: Video) {
+  console.log(`[YoutubeVideosPage] playplaylist(${video.id})`);
+  this.modalCtrl
+    .create({
+      component: PlaylistSelectPage,
+      componentProps: { video: video }
+    })
+    .then(modal => modal.present());
+}
+
+
 }

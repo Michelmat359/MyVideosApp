@@ -7,6 +7,7 @@ export class MemoryVideosService extends VideosService {
   private nextId = 0;
 
   constructor() { super(); }
+  
   findVideos(query: string): Promise<Video[]> {
     console.log(`[MemoryVideosService] findVideos(${query})`);
     return new Promise((resolve, reject) => {
@@ -21,7 +22,7 @@ export class MemoryVideosService extends VideosService {
     console.log(`[MemoryVideosService] findVideoById(${id})`);
     var index = this.videos.findIndex((video) => video.id === id);
     return new Promise((resolve, reject) => {
-      resolve((index === -1) ? null : this.clone(this.videos[index]));
+      resolve((index === -1) ? null : this.clone(this.videos[id]));
     });
   }
 

@@ -7,6 +7,7 @@ import { MemoryVideosService } from './memory-videos.service';
 import { YoutubeVideosService } from "./youtube-videos.service";
 
 
+
 @Injectable({
   providedIn: "root"
 })
@@ -34,6 +35,7 @@ export class MemoryPlaylistsService extends PlaylistsService {
     let _playlist = this.clone(playlist);
     _playlist.id = String(this.aux++);
     this.playlists.push(_playlist);
+    console.log(this.playlists);
     return new Promise((resolve, reject) => resolve(this.clone(_playlist)));
   }
 
@@ -62,7 +64,8 @@ export class MemoryPlaylistsService extends PlaylistsService {
 
   addVideo(playlistId: string, video: Video): Promise<void> {
     console.log('[MemoryPlaylistsService] addVideo(' + JSON.stringify(playlistId) + ', ' + JSON.stringify(video.id) + ')');
-    var index = this.playlists.findIndex(_playlist => _playlist.id = playlistId);
+   
+    var index = this.playlists.findIndex(_playlist => _playlist.id === playlistId);
     if (index !== -1) {
       this.playlists[index].count += 1;
       var indexPlaylist = this.playlistsTotal.findIndex(_playlist => _playlist.playlistId === playlistId);
@@ -73,7 +76,9 @@ export class MemoryPlaylistsService extends PlaylistsService {
       }
       return new Promise((resolve, reject) => resolve());
     } else {
-      return new Promise((resolve, reject) => reject(new Error(`Playlist with id ${playlistId} not found`)));
+      return new Promise((resolve, reject) =>
+        reject(new Error(`Playlist with id ${playlistId} not found`))
+      );
     }
   }
 
@@ -97,6 +102,7 @@ export class MemoryPlaylistsService extends PlaylistsService {
   }
 
   async listVideos(playlistId: string): Promise<Video[]> {
+    
     console.log(`[MemoryPlaylistsService] listVideos(${playlistId})`);
     var index = this.playlists.findIndex(_playlist => _playlist.id = playlistId);
     if (index !== -1) {
@@ -104,8 +110,10 @@ export class MemoryPlaylistsService extends PlaylistsService {
       let _videos: Video[] = [];
       if (indexPlaylist !== -1) {
         //Hay que mirar si es de youtube o de los archivos subidos
+        console.log(this.playlistsTotal[indexPlaylist].videos);
         for (const videoId of this.playlistsTotal[indexPlaylist].videos) {
           var video: Video = await this.memoryService.findVideoById(videoId);
+          console.log(video);
           if (!video) {
             video = await this.youtubeService.findVideoById(videoId);
           }

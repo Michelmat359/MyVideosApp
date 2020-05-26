@@ -46,10 +46,13 @@ export class PlaylistSelectPage implements OnInit {
 
   addToPlaylist(playlist: Playlist) {
     console.log(`[PlaylistsSelectorPage] addToPlaylist(${playlist.id})`);
+    console.log(this.playlists);
     this.playlists
       .addVideo(playlist.id, this.video)
       .then(_ => {
-        this.changes.detectChanges();
+        this.changes.detectChanges()
+      }).then(_=> {
+        this.close();
       })
       .catch(err => {
         // Handle error

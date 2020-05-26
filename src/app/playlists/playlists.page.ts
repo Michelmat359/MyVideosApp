@@ -9,6 +9,7 @@ import { PlaylistEditPage } from '../playlist-edit/playlist-edit.page';
 import { PlaylistsService } from '../services/playlists.service';
 import { AlertController } from '@ionic/angular';
 import { PlaylistVideosPage } from "../playlist-videos/playlist-videos.page";
+import { PlaylistPlayerPage } from "../playlist-player/playlist-player.page";
 
 
 
@@ -32,6 +33,16 @@ export class PlaylistsPage implements OnInit {
     private alertCtrl: AlertController) { }
 
   ngOnInit() {
+    console.log('ngOnInit searchPlayList');
+    this.searchPlayList();
+  }
+
+  ionViewCanEnter(){
+    //return //your check;
+    this.searchPlayList();
+  }
+  ionViewWillEnter(){
+    //your code;
     this.searchPlayList();
   }
 
@@ -157,6 +168,14 @@ export class PlaylistsPage implements OnInit {
   }
 
   playPlaylists(playlist: Playlist) {
+    this.modalCtrl
+      .create({
+        component: PlaylistPlayerPage,
+        componentProps: { playlist: playlist }
+      })
+      .then(modal => {
+        modal.present();
+      });
   }
 
   abrirPlaylist(playlist: Playlist) {

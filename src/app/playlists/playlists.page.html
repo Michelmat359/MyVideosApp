@@ -27,12 +27,12 @@
          {{playlist.description}} 
       </ion-card-content>
       <ion-item>
-        <ion-button fill="clear" slot="start" >
+        <ion-button fill="clear" slot="start"  (click)=abrirPlaylist(playlist)>
           <ion-icon slot="start" name="videocam"></ion-icon>
            {{playlist.count}}  Videos
         </ion-button>
-        <ion-button fill="clear" slot="start" >
-          <ion-icon slot="start" name="play"></ion-icon>
+        <ion-button fill="clear" slot="start"  (click)=playPlaylists(playlist)>
+          <ion-icon slot="start" name="play" ></ion-icon>
           Play
         </ion-button>
 
