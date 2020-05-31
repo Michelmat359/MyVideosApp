@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="dark">
     <ion-title class="ion-text-center">PlaylistVideos {{ playlist.title }}</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="close()">
@@ -16,8 +16,8 @@
         <img [src]="video.thumbnail? video.thumbnail.url: '/assets/video.png'">
       </ion-thumbnail>
       <ion-label>
-        <h3>{{ video.title }}</h3>
-        <p *ngIf="video.description">{{ video.description }}</p>
+        <h3 style="color: #10dc60">{{ video.title }}</h3>
+        <p style="color: #ffffff" *ngIf="video.description">{{ video.description }}</p>
       </ion-label>
       <ion-button slot="end" fill="clear" (click)="showMenu(video)">
         <ion-icon name="ellipsis-vertical"></ion-icon>

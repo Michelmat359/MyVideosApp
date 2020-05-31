@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="dark">
     <ion-title class="ion-text-center">Selecciona Playlist</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="close()">
@@ -10,14 +10,14 @@
 </ion-header>
 
 <ion-content>
-  <ion-list>
+  <ion-list color="dark">
     <ion-item *ngFor="let playlist of myPlaylists" (click)="addToPlaylist(playlist)">
       <ion-thumbnail slot="start">
         <img [src]="playlist.thumbnail ? playlist.thumbnail.url : '/assets/video.png'" />
       </ion-thumbnail>
       <ion-label>
-        <h3>{{ playlist.title }}</h3>
-        <p *ngIf="playlist.description">{{ playlist.description }}</p>
+        <h3 style="color: #10dc60">{{ playlist.title }}</h3>
+        <p style="color: #ffffff" *ngIf="playlist.description">{{ playlist.description }}</p>
       </ion-label>
       <ion-badge slot="end">{{ playlist.count }}</ion-badge>
     </ion-item>

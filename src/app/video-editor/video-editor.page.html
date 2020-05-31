@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="dark">
     <ion-buttons slot="start">
       <ion-button *ngIf="mode !== 'view'" (click)="save()"><ion-icon name="save-sharp"></ion-icon></ion-button>
     </ion-buttons>
@@ -12,7 +12,8 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<ion-content class="ion-padding-horizontal">
+<ion-content class="ion-padding-horizontal" color="dark"> 
+  <ion-card>
   <ion-list>
     <ion-item>
       <ion-label position="floating">Titulo</ion-label>
@@ -26,10 +27,9 @@
       <ion-label position="floating">Etiquetas</ion-label>
       <ion-input type="text" [readonly]="mode === 'view'" [(ngModel)]="video.tags"></ion-input>
     </ion-item>
-    
   </ion-list>
-  <ion-card>
-    <ion-fab vertical="top" horizontal="end">
+  
+    <ion-fab vertical="end" horizontal="end">
       <ion-fab-button>
         <ion-icon name="create"></ion-icon>
       </ion-fab-button>

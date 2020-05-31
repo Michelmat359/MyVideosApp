@@ -1,13 +1,13 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="dark">
     <ion-title class="ion-text-center">Mis Videos</ion-title>
   </ion-toolbar>
-   <ion-toolbar>
-    <ion-searchbar [(ngModel)]="query" (ionInput)="searchVideos($event)">
+   <ion-toolbar  color="dark">
+    <ion-searchbar  color="dark" [(ngModel)]="query" (ionInput)="searchVideos($event)">
       </ion-searchbar>
   </ion-toolbar>
 </ion-header>
-<ion-content>
+<ion-content  color="dark">
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button>
       <ion-icon name="add"></ion-icon>
@@ -21,13 +21,13 @@
       </ion-fab-button>
     </ion-fab-list>
   </ion-fab>
-  <ion-list>
-    <ion-item *ngFor="let video of myVideos">
+  <ion-list >
+    <ion-item  color="dark" *ngFor="let video of myVideos">
       <ion-thumbnail slot="start"  (click)="playVideo(video)">
         <img [src]="video.thumbnail? video.thumbnail.url: '/assets/video.png'">
       </ion-thumbnail>
       <ion-label>
-        <h3>{{ video.title }}</h3>
+        <h3 style="color: #10dc60">{{ video.title }}</h3>
         <p *ngIf="video.description">{{ video.description }}</p>
       </ion-label>
       <ion-button slot="end" fill="clear" (click)="showMenu(video)">
