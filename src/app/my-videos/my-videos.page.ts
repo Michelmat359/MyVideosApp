@@ -193,7 +193,8 @@ export class MyVideosPage implements OnInit {
         text: 'Editar',
         icon: 'create',
         handler: () => {
-          console.log('Edit video!!');
+          console.log('Edit video');
+          console.log(video);
           this.editVideo(video);
         }
       },

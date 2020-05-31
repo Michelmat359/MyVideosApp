@@ -17,7 +17,7 @@ export class MemoryPlaylistsService extends PlaylistsService {
   private aux = 0;
   private playlistsTotal: { playlistId: string; videos: string[] }[] = [];
   constructor(
-    private memoryService: MemoryVideosService,
+    private memoryVideosService: MemoryVideosService,
     private youtubeService: YoutubeVideosService
   ) { super(); }
 
@@ -112,10 +112,12 @@ export class MemoryPlaylistsService extends PlaylistsService {
         //Hay que mirar si es de youtube o de los archivos subidos
         console.log(this.playlistsTotal[indexPlaylist].videos);
         for (const videoId of this.playlistsTotal[indexPlaylist].videos) {
-          var video: Video = await this.memoryService.findVideoById(videoId);
+          console.log(videoId);
+          var id = videoId.toString(); 
+          var video = await this.memoryVideosService.findVideoById(id);
           console.log(video);
           if (!video) {
-            video = await this.youtubeService.findVideoById(videoId);
+            video = await this.youtubeService.findVideoById(id);
           }
           _videos.push(video);
         }

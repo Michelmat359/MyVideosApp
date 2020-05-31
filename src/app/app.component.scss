@@ -1,0 +1,13 @@
+.tabs-ios .tabbar,
+.tabs-md .tab-button 
+{
+  background: #222;
+}
+.tabs-md .tab-button,
+.tabs-md .tab-button-icon {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+ion-card-content > ion-title {
+  text-align: center;
+}

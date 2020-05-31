@@ -6,8 +6,27 @@ export class MemoryVideosService extends VideosService {
   private videos: Video[] = [];
   private nextId = 0;
 
-  constructor() { super(); }
+  constructor() { super();
+    this.videos.push(
+      {
+        id:'1',
+        type:'local',
+        url:'/assets/videos/Android.mp4',
+        title:'Android',
+        description:'Android video',
+        thumbnail: {
+          width: 720, 
+          url: '/assets/videos/android.jpg',
+          height: 1280,
+        },
+        tags:'video',
+        duration:'',
+        date:'',
+        width:450,   
+      });
   
+  }
+
   findVideos(query: string): Promise<Video[]> {
     console.log(`[MemoryVideosService] findVideos(${query})`);
     return new Promise((resolve, reject) => {
@@ -22,13 +41,13 @@ export class MemoryVideosService extends VideosService {
     console.log(`[MemoryVideosService] findVideoById(${id})`);
     var index = this.videos.findIndex((video) => video.id === id);
     return new Promise((resolve, reject) => {
-      resolve((index === -1) ? null : this.clone(this.videos[id]));
+      resolve((index === -1) ? null : this.clone(this.videos[index]));
     });
   }
 
+
   addVideo(video: Video): Promise<Video> {
-    console.log('[MemoryVideosService] addVideo(' + JSON.stringify(video) +
-      ')');
+    console.log('[MemoryVideosService] addVideo(' + JSON.stringify(video) +')');
     let _video = this.clone(video);
     _video.id = String(this.nextId++);
     this.videos.push(_video);
@@ -46,7 +65,7 @@ export class MemoryVideosService extends VideosService {
 {id} not found`)));
     }
   }
-  
+
   updateVideo(video: Video): Promise<Video> {
     console.log('[MemoryVideosService] updateVideo(' + JSON.stringify(video) +
       ')');
@@ -60,6 +79,8 @@ export class MemoryVideosService extends VideosService {
     }
   }
   private clone(video: Video): Video {
+    console.log("CLONE");
+    console.log(video);
     return {
       id: video.id,
       type: video.type,

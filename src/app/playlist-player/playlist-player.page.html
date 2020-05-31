@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Playing: {{ playlist.title }}</ion-title>
+    <ion-title class="ion-text-center">Playing: {{ playlist.title }}</ion-title>
     <ion-buttons slot="end">
       <ion-button *ngIf="index - 1 > -1" (click)="playPrevious()">
         <ion-icon name="skip-backward"></ion-icon>
