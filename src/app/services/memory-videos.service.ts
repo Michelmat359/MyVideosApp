@@ -9,7 +9,7 @@ export class MemoryVideosService extends VideosService {
   constructor() { super();
     this.videos.push(
       {
-        id:'1',
+        id:'0',
         type:'local',
         url:'/assets/videos/Android.mp4',
         title:'Android',
@@ -17,6 +17,38 @@ export class MemoryVideosService extends VideosService {
         thumbnail: {
           width: 720, 
           url: '/assets/videos/android.jpg',
+          height: 1280,
+        },
+        tags:'video',
+        duration:'',
+        date:'',
+        width:450,   
+      },
+      {
+        id:'1',
+        type:'local',
+        url:'/assets/videos/apple.mp4',
+        title:'Apple',
+        description:'Apple video',
+        thumbnail: {
+          width: 720, 
+          url: '/assets/videos/apple.jpg',
+          height: 1280,
+        },
+        tags:'video',
+        duration:'',
+        date:'',
+        width:450,   
+      },
+      {
+        id:'2',
+        type:'local',
+        url:'/assets/videos/samsung.mp4',
+        title:'Samsung',
+        description:'Samsung video',
+        thumbnail: {
+          width: 720, 
+          url: '/assets/videos/samsung.jpg',
           height: 1280,
         },
         tags:'video',
