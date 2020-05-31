@@ -16,7 +16,7 @@
         <img [src]="video.thumbnail? video.thumbnail.url: '/assets/video.png'">
       </ion-thumbnail>
       <ion-label>
-        <h3 style="color: #10dc60">{{ video.title }}</h3>
+        <h3 style="color: #10dc60">{{ video.title }}</h3> 
         <p style="color: #ffffff" *ngIf="video.description">{{ video.description }}</p>
       </ion-label>
       <ion-button slot="end" fill="clear" (click)="showMenu(video)">
