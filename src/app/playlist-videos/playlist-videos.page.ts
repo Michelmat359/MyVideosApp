@@ -3,6 +3,15 @@ import { Playlist } from "../models/playlist";
 import { Video } from "../models/video";
 import { ModalController } from "@ionic/angular";
 import { PlaylistsService } from "../services/playlists.service";
+import { ActionSheetController } from '@ionic/angular';
+import { AlertController } from '@ionic/angular';
+import { VideoEditorPage } from '../video-editor/video-editor.page';
+import { VideoPlayerPage } from '../video-player/video-player.page';
+import { OverlayEventDetail } from '@ionic/core';
+import { VideosService } from '../services/videos.service';
+
+
+
 
 @Component({
   selector: 'app-playlist-videos',
@@ -13,10 +22,12 @@ export class PlaylistVideosPage implements OnInit {
   private playlist: Playlist;
   private myVideos: Video[] = [];
 
-  constructor(
+  constructor(private videos: VideosService,
     private playlists: PlaylistsService,
     private modalCtrl: ModalController,
-    private changes: ChangeDetectorRef) { }
+    private changes: ChangeDetectorRef,
+    public actionSheetCtrl: ActionSheetController,
+    private alertCtrl: AlertController) { }
 
   ngOnInit() {
     this.playlist = this.clone(this.playlist);
@@ -52,6 +63,86 @@ export class PlaylistVideosPage implements OnInit {
     };
   }
 
- 
+  showMenu(video) {
+    this.actionSheetCtrl.create({
+      buttons: [
+      {
+        text: 'Play',
+        icon: 'play',
+        handler: () => {
+          console.log('Play video!!');
+          this.playVideo(video);
+        }
+      },
+      {
+        text: 'Editar',
+        icon: 'create',
+        handler: () => {
+          console.log('Edit video');
+          console.log(video);
+          this.editVideo(video);
+        }
+      },
+      {
+        text: 'Eliminar de la playlist',
+        icon: 'trash',
+        handler: () => {
+          console.log('Delete video!!');
+          this.deleteVideo(video);
+        }
+      }]
+    }).then((actionSheet) => actionSheet.present());
+  }
+
+  editVideo(video: Video) {
+    console.log(`[PlaylistPage] editVideo(${video.id})`);
+    this.modalCtrl.create({
+      component: VideoEditorPage,
+      componentProps: { mode: 'edit', video: video }
+    })
+      .then((modal) => {
+        modal.onDidDismiss()
+          .then((evt: OverlayEventDetail) => {
+            if (evt && evt.data) {
+              this.videos.updateVideo(evt.data)
+                .then(() => this.searchVideos());
+            }
+          });
+        modal.present();
+      });
+  }
+
+  playVideo(video: Video) {
+    console.log(`[PlaylistPage] playVideo(${video.id})`);
+    this.modalCtrl.create({
+      component: VideoPlayerPage,
+      componentProps: { video: video }
+    }).then((modal) => modal.present());
+  }
+
+
+  deleteVideo(video: Video) {
+    console.log(`[MyVideosPage] deleteVideo(${video.id})`);
+    this.alertCtrl.create({
+      header: 'Eliminar video de la playlist',
+      message: '¿Estás seguro?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Acceptar', handler: () => {
+            this.playlists.removeVideo(this.playlist.id, video.id)
+              .then(() => this.searchVideos());
+            
+          }
+        }
+      ]
+    }).then((alert) => alert.present());
+  }
 
 }
