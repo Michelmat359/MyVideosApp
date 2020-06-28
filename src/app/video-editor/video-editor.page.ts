@@ -70,7 +70,7 @@ export class VideoEditorPage implements OnInit {
     };
   }
 
-  imagebutton(){
+  imageButton(){
     //Avatar
     console.log("[VideoEditorPage] imagebutton()");
     this.camera.getPicture(this.optionsVideo).then((imageData) => {
