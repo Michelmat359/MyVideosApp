@@ -7,55 +7,55 @@ export class MemoryVideosService extends VideosService {
   private nextId = 0;
 
   constructor() { super();
-    this.videos.push(
-      {
-        id:'0',
-        type:'local',
-        url:'/assets/videos/Android.mp4',
-        title:'Android',
-        description:'Android video',
-        thumbnail: {
-          width: 720, 
-          url: '/assets/videos/android.jpg',
-          height: 1280,
-        },
-        tags:'video',
-        duration:'',
-        date:'',
-        width:450,   
-      },
-      {
-        id:'1',
-        type:'local',
-        url:'/assets/videos/apple.mp4',
-        title:'Apple',
-        description:'Apple video',
-        thumbnail: {
-          width: 720, 
-          url: '/assets/videos/apple.jpg',
-          height: 1280,
-        },
-        tags:'video',
-        duration:'',
-        date:'',
-        width:450,   
-      },
-      {
-        id:'2',
-        type:'local',
-        url:'/assets/videos/samsung.mp4',
-        title:'Samsung',
-        description:'Samsung video',
-        thumbnail: {
-          width: 720, 
-          url: '/assets/videos/samsung.jpg',
-          height: 1280,
-        },
-        tags:'video',
-        duration:'',
-        date:'',
-        width:450,   
-      });
+    // this.videos.push(
+    //   {
+    //     id:'0',
+    //     type:'local',
+    //     url:'/assets/videos/Android.mp4',
+    //     title:'Android',
+    //     description:'Android video',
+    //     thumbnail: {
+    //       width: 720, 
+    //       url: '/assets/videos/android.jpg',
+    //       height: 1280,
+    //     },
+    //     tags:'video',
+    //     duration:'',
+    //     date:'',
+    //     width:450,   
+    //   },
+    //   {
+    //     id:'1',
+    //     type:'local',
+    //     url:'/assets/videos/apple.mp4',
+    //     title:'Apple',
+    //     description:'Apple video',
+    //     thumbnail: {
+    //       width: 720, 
+    //       url: '/assets/videos/apple.jpg',
+    //       height: 1280,
+    //     },
+    //     tags:'video',
+    //     duration:'',
+    //     date:'',
+    //     width:450,   
+    //   },
+    //   {
+    //     id:'2',
+    //     type:'local',
+    //     url:'/assets/videos/samsung.mp4',
+    //     title:'Samsung',
+    //     description:'Samsung video',
+    //     thumbnail: {
+    //       width: 720, 
+    //       url: '/assets/videos/samsung.jpg',
+    //       height: 1280,
+    //     },
+    //     tags:'video',
+    //     duration:'',
+    //     date:'',
+    //     width:450,   
+    //   });
   
   }
 
@@ -111,7 +111,6 @@ export class MemoryVideosService extends VideosService {
     }
   }
   private clone(video: Video): Video {
-    console.log("CLONE");
     console.log(video);
     return {
       id: video.id,

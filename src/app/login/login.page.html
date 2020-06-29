@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-title class="ion-text-center">Mis Videos App</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content color="dark" class="ion-padding-horizontal">
+  <img style="width: 120px; height: 120px; position: relative;" src="../assets/miSeta.png">
+  
+  <ion-list >
+    <ion-item  color="dark">
+      <ion-label position="floating">Username</ion-label>
+      <ion-input type="text" [(ngModel)]="user"></ion-input>
+    </ion-item>
+    <ion-item  color="dark">
+      <ion-label position="floating">Password</ion-label>
+      <ion-input type="password" [(ngModel)]="password"></ion-input>
+    </ion-item>
+  </ion-list>
+  <div style="padding-top: 20px;">
+    <ion-button color="primary" expand="block" (click)="doLogin()">Login</ion-button>
+    <ion-button color="primary" expand="block" (click)="signup()">Sign up</ion-button>
+  </div>
+</ion-content>

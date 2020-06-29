@@ -9,6 +9,7 @@ import { OverlayEventDetail } from '@ionic/core';
 import { ActionSheetController } from '@ionic/angular';
 import { VideoPlayerPage } from '../video-player/video-player.page';
 import { PlaylistSelectPage } from "../playlist-select/playlist-select.page";
+import { RESTVideosService} from "../services/restvideos.service";
 
 
 @Component({
@@ -21,7 +22,7 @@ import { PlaylistSelectPage } from "../playlist-select/playlist-select.page";
 export class MyVideosPage implements OnInit {
   private query = '';
   private myVideos: Video[] = [];
-  constructor(private videos: VideosService,
+  constructor(private videos: RESTVideosService,
     private alertCtrl: AlertController,
     private camera: Camera,
     private modalCtrl: ModalController,

@@ -10,6 +10,7 @@ import { PlaylistsService } from '../services/playlists.service';
 import { AlertController } from '@ionic/angular';
 import { PlaylistVideosPage } from "../playlist-videos/playlist-videos.page";
 import { PlaylistPlayerPage } from "../playlist-player/playlist-player.page";
+import { RESTPlaylistsService } from '../services/restplaylist.service';
 
 
 
@@ -26,7 +27,7 @@ export class PlaylistsPage implements OnInit {
 
   constructor(
     private videos: VideosService,
-    private playlists: PlaylistsService,
+    private playlists: RESTPlaylistsService,
     public changes: ChangeDetectorRef,
     public actionSheetCtrl: ActionSheetController,
     private modalCtrl: ModalController,

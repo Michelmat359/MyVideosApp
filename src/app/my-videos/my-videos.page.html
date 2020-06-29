@@ -1,6 +1,9 @@
 <ion-header>
   <ion-toolbar color="dark">
     <ion-title class="ion-text-center">Mis Videos</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
   </ion-toolbar>
    <ion-toolbar  color="dark">
     <ion-searchbar  color="dark" [(ngModel)]="query" (ionInput)="searchVideos($event)">
