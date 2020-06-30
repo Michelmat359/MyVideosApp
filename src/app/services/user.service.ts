@@ -12,96 +12,129 @@ export class UserService {
   private user: User;
 
   constructor(private http: HttpClient) {
-    console.log('Hello LoginService');
+    console.log('LoginService Init()');
   }
   
-  login(user: string, password: string): Promise<void> {
-    console.log(`[LoginService] login(${user},${password})`);
+  
+  getSessionToken(): string {
+    return this.token;
+  }
+
+  getSessionUser(): User {
+    return this.user;
+  }
+
+  login(email: string, password: string): Promise<boolean> {
+    console.log(`[UserService] login(${email})`);
     return new Promise((resolve, reject) => {
-      let url = this.rootUrl + `/sessions`;
-      this.http.post(url, { email: user, password: password })
+      this.http
+        .post(`${this.rootUrl}/sessions`, {
+          email: email,
+          password: password
+        })
         .subscribe(
-          (data: { userId: string, token: string }) => {
+          (data: { userId: string; token: string }) => {
             this.token = data.token;
-            localStorage.setItem('token', data.token);            
-            let url = this.rootUrl + `/users/${data.userId}`;
-            this.http.get(url, { params: { token: this.token } })
-              .subscribe(
-                (user: User) => {
-                  this.user = user;
-                  localStorage.setItem('user', JSON.stringify(user));
-                  resolve();
-                },
-                (err) => reject(err)
-              );
+            let url = `${this.rootUrl}/users/${data.userId}`;
+            this.http.get(url, { params: { token: this.token } }).subscribe(
+              (user: User) => {
+                this.user = user;
+                resolve(true);
+              },
+              err => reject(err)
+            );
           },
-          (err) => reject(err)
+          err => {
+            console.log(
+              `[UserService] login(${email}) ERROR: ` + JSON.stringify(err)
+            );
+            reject(err);
+          }
         );
     });
   }
 
   logout(): Promise<void> {
-    console.log(`[LoginService] logout()`);
+    console.log(`[UserService] logout()`);
     return new Promise((resolve, reject) => {
       this.token = null;
       this.user = null;
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      localStorage.clear();
       resolve();
     });
   }
 
   addUser(user: User): Promise<User> {
-    console.log('[LoginService] addUser(' + JSON.stringify(user) + ')');
+    console.log(`[UserService] createUser(${user.email})`);
     return new Promise((resolve, reject) => {
-      let url = this.rootUrl + `/users`;
-      this.http.post(url, user)
-        .subscribe(
-          (user: User) => { resolve(user); },
-          (err) => { reject(err); }
-        );
+      this.http.post(`${this.rootUrl}/users`, user).subscribe(
+        (user: User) => {
+          console.log(`[UserService] createUser(${user.email}) SUCCESS.`);
+          this.user = user;
+          resolve(user);
+        },
+        err => {
+          console.log(
+            `[UserService] createUser(${user.email}) ERROR: ` +
+              JSON.stringify(err)
+          );
+          reject(err);
+        }
+      );
     });
   }
 
-  listUsers(): Promise<User[]> {
-    console.log('[LoginService] listUsers');
-    return new Promise((resolve, reject) => {
-      let url = this.rootUrl + `/users`;
-      this.http.get(url, { params: { token: this.token } })
-        .subscribe(
-          (users: User[]) => { 
-            //resolve(user); console.log('listusers') 
-            console.log('resultado listado');
-            console.log(users);
-          },
-          (err) => { reject(err); }
-        );
-    });
-  }
-
-  getUser(): User {
-    console.log(`[LoginService] getUser(): ` + JSON.stringify(this.user));
-    //return this.user;
-    return JSON.parse(localStorage.getItem('user'));
-  }
-  getToken(): string {
-    return localStorage.getItem('token');
-    //return this.token;
-  }
   updateUser(user: User): Promise<User> {
-    console.log('[LoginService] updateUser(' + JSON.stringify(user) + ')');
+    console.log("[UserService] updateUser(" + JSON.stringify(user) + ")");
     return new Promise((resolve, reject) => {
-      let url = this.rootUrl + `/users/${this.user.id}`;
-      this.http.put(url, user, { params: { token: this.token } })
+      this.http
+        .put(`${this.rootUrl}/users/${this.user.id}`, user, {
+          params: { token: this.token }
+        })
         .subscribe(
           (user: User) => {
             this.user = user;
             resolve(user);
           },
-          (err) => { reject(err); }
+          err => {
+            reject(err);
+          }
         );
     });
   }
+
+  findUserById(id: string): Promise<User> {
+    console.log(`[UserService] findUserById(${id})`);
+    return new Promise((resolve, reject) => {
+      this.http
+        .get(`${this.rootUrl}/users/${id}`, { params: { token: this.token } })
+        .subscribe(
+          (data: any) => {
+            console.log(`[UserService] findUserById(${id}) SUCCESS.`);
+            let user = this.clone(data.items[0]);
+            resolve(user);
+          },
+          err => {
+            console.log(
+              `[UserService] findUserById(${id}) ERROR: ` + JSON.stringify(err)
+            );
+            reject(err);
+          }
+        );
+    });
+  }
+
+  private clone(user: any): User {
+    let clone: User = {
+      id: user.id,
+      email: user.email,
+      password: user.password,
+      name: user.name,
+      surname: user.surname
+    };
+
+    console.log("[UserService] clone() => " + JSON.stringify(clone));
+    return clone;
+  }
+
 }
 

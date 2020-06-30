@@ -35,7 +35,7 @@ export class PlaylistSelectPage implements OnInit {
         console.log('[MyPlaylistPage] searchPlayList() => ' + JSON.stringify(this.myPlaylists));
         this.changes.detectChanges();
       }).then(_=> {
-        this.close();
+        //this.close();
       })
   }
 

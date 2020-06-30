@@ -5,20 +5,20 @@
 </ion-header>
 
 <ion-content color="dark" class="ion-padding-horizontal">
-  <img style="width: 120px; height: 120px; position: relative;" src="../assets/miSeta.png">
+  <img style="padding: 20px; display:block; margin:auto;" src="../assets/Logo.png">
   
   <ion-list >
     <ion-item  color="dark">
-      <ion-label position="floating">Username</ion-label>
+      <ion-label position="floating">Email:</ion-label>
       <ion-input type="text" [(ngModel)]="user"></ion-input>
     </ion-item>
     <ion-item  color="dark">
-      <ion-label position="floating">Password</ion-label>
+      <ion-label position="floating">Contraseña</ion-label>
       <ion-input type="password" [(ngModel)]="password"></ion-input>
     </ion-item>
   </ion-list>
   <div style="padding-top: 20px;">
     <ion-button color="primary" expand="block" (click)="doLogin()">Login</ion-button>
-    <ion-button color="primary" expand="block" (click)="signup()">Sign up</ion-button>
+    <ion-button color="primary" expand="block" (click)="signup()">Registrarse</ion-button>
   </div>
 </ion-content>

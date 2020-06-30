@@ -9,7 +9,6 @@ import { OverlayEventDetail } from '@ionic/core';
 import { ActionSheetController } from '@ionic/angular';
 import { VideoPlayerPage } from '../video-player/video-player.page';
 import { PlaylistSelectPage } from "../playlist-select/playlist-select.page";
-import { RESTVideosService} from "../services/restvideos.service";
 
 
 @Component({
@@ -22,7 +21,7 @@ import { RESTVideosService} from "../services/restvideos.service";
 export class MyVideosPage implements OnInit {
   private query = '';
   private myVideos: Video[] = [];
-  constructor(private videos: RESTVideosService,
+  constructor(private videos: VideosService,
     private alertCtrl: AlertController,
     private camera: Camera,
     private modalCtrl: ModalController,
@@ -41,8 +40,7 @@ export class MyVideosPage implements OnInit {
     this.videos.findVideos(query)
       .then((videos) => {
         this.myVideos = videos
-        console.log('[MyVideosPage] searchVideos() => ' +
-          JSON.stringify(this.myVideos));
+        console.log('[MyVideosPage] searchVideos() => ' + JSON.stringify(this.myVideos));
         this.changes.detectChanges();
       });
   }

@@ -3,117 +3,235 @@ import { UserService } from './user.service';
 import { HttpClient } from '@angular/common/http';
 import { Video } from '../models/video';
 import {Playlist} from '../models/playlist';
-import { RESTVideosService } from './restvideos.service';
+import { PlaylistsService } from './playlists.service';
+import { YoutubeVideosService } from "./youtube-videos.service";
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class RESTPlaylistsService {
+export class RESTPlaylistsService extends PlaylistsService{
 
   private rootUrl = 'http://localhost:8080/myvideos';
-  private Playlist: Playlist[] = [];
-  private videos: Video[] = [];
-  private nextId = 0;
-  private PlaylistVideos = [];
-  constructor(private login: UserService, private http: HttpClient, private Videos: RESTVideosService) { }
+  private token: string;
+  private userId: string;
+  constructor(
+    private users: UserService,
+    private youtube: YoutubeVideosService,
+    private http: HttpClient
+  ) {
+    super();
+    this.token = users.getSessionToken();
+    this.userId = users.getSessionUser().id;
+  }
 
-
- findPlaylists(query?:string):Promise<Playlist[]> {
- console.log(`[RESTPlayListVideosService] findPlaylsits`);
- let user = this.login.getUser();
- return new Promise((resolve, reject) => {
-   let url = this.rootUrl + `/users/${user.id}/playlists`;
-   let params: any = { token: this.login.getToken() };
-   this.http.get(url, { params: params })
-     .subscribe(
-       (playlist: Playlist[]) => { resolve(playlist); },
-       (err) => { reject(err); }
-     );
- });
-}
-
+  findPlaylists(): Promise<Playlist[]> {
+    console.log(`[RESTPlaylistsService] findPlaylists()`);
+    return new Promise((resolve, reject) => {
+      this.http
+        .get(`${this.rootUrl}/users/${this.userId}/playlists`, {
+          params: { token: this.token, q: "" }
+        })
+        .subscribe(
+          (playlists: [Playlist]) => {
+            resolve(playlists);
+          },
+          err => {
+            console.log(
+              `[RESTPlaylistsService] findPlaylists() ERROR: ` +
+                JSON.stringify(err)
+            );
+            reject(err);
+          }
+        );
+    });
+  }
 
   addPlaylist(playlist: Playlist): Promise<Playlist> {
-    console.log('[RESTPlayListsService] addPlaylist(' + JSON.stringify(playlist) + ')');
-    let user = this.login.getUser();
+    console.log(`[RESTPlaylistsService] addPlaylist(${playlist.title})`);
     return new Promise((resolve, reject) => {
-      let url = this.rootUrl + `/users/${user.id}/playlists`;
-      let params: any = { token: this.login.getToken() };
-      this.http.post(url, playlist, { params: { token: this.login.getToken() } })
+      this.http
+        .post(`${this.rootUrl}/users/${this.userId}/playlists`, playlist, {
+          params: { token: this.token }
+        })
         .subscribe(
-          (plaslist: Playlist) => { resolve(playlist); },
-          (err) => { reject(err); }
+          (playlist: Playlist) => {
+            resolve(playlist);
+          },
+          err => {
+            console.log(
+              `[RESTPlaylistsService] addPlaylist(${playlist.title}) ERROR: ` +
+                JSON.stringify(err)
+            );
+            reject(err);
+          }
         );
     });
   }
 
-  updatePlaylist(playlist: Playlist): Promise<Video> {
-    console.log('[RESTPlayListsService] updatePlaylist()');
-    let user = this.login.getUser();
+  removePlaylist(playlistId: string): Promise<void> {
+    console.log(`[RESTPlaylistsService] removePlaylist(${playlistId})`);
     return new Promise((resolve, reject) => {
-      let url = this.rootUrl + `/users/${user.id}/playlists/${playlist.id}`;
-      this.http.put(url, playlist, { params: { token: this.login.getToken() } })
+      this.http
+        .delete(
+          `${this.rootUrl}/users/${this.userId}/playlists/${playlistId}`,
+          {
+            params: { token: this.token }
+          }
+        )
         .subscribe(
-          (video: Video) => { resolve(video); },
-          (err) => { reject(err); }
+          (data: any) => {
+            resolve();
+          },
+          err => {
+            console.log(
+              `[RESTPlaylistsService] removePlaylist(${playlistId}) ERROR: ` +
+                JSON.stringify(err)
+            );
+            reject(err);
+          }
         );
     });
   }
 
-  removePlaylist(id: string): Promise<void> {
-    console.log('[RESTPlayListsService] removePlaylist()');
-    let user = this.login.getUser();
+  updatePlaylist(playlist: Playlist): Promise<Playlist> {
+    console.log(`[RESTPlaylistsService] removePlaylist(${playlist.id})`);
     return new Promise((resolve, reject) => {
-      let url = this.rootUrl + `/users/${user.id}/playlists/${id}`;
-      this.http.delete(url, { params: { token: this.login.getToken() } })
+      this.http
+        .put(
+          `${this.rootUrl}/users/${this.userId}/playlists/${playlist.id}`,
+          playlist,
+          {
+            params: { token: this.token }
+          }
+        )
         .subscribe(
-          () => { resolve(); },
-          (err) => { reject(err); }
-        );
-    });
-  }
-
-
-  listVideos(playlistId: string): Promise<Video[]> {
-    console.log('[RESTPlayListsService] listVideosPlaylist()');
-    let user = this.login.getUser();
-    return new Promise((resolve, reject) => {
-      let url = this.rootUrl + `/users/${user.id}/playlists/${playlistId}/videos`;
-      let params: any = { token: this.login.getToken() };
-      this.http.get(url, { params: params })
-        .subscribe(
-          (videos: Video[]) => { resolve(videos); },
-          (err) => { reject(err); }
-        );
-    });
-  }
-
-  removeVideo(playlistId: string, videoId: string): Promise<void>{
-    console.log('[RESTPlayListsService] removevideo()');
-    let user = this.login.getUser();
-    return new Promise((resolve, reject) => {
-      let url = this.rootUrl + `/users/${user.id}/playlists/${playlistId}/videos/${videoId}`;
-      this.http.delete(url, { params: { token: this.login.getToken() } })
-        .subscribe(
-          () => { resolve(); },
-          (err) => { reject(err); }
+          (playlist: Playlist) => {
+            resolve(playlist);
+          },
+          err => {
+            console.log(
+              `[RESTPlaylistsService] removePlaylist(${playlist.id}) ERROR: ` +
+                JSON.stringify(err)
+            );
+            reject(err);
+          }
         );
     });
   }
 
   addVideo(playlistId: string, video: Video): Promise<void> {
-    console.log('[RESTPlayListsService] addvideo()');
-    let user = this.login.getUser();
+    console.log(
+      `[RESTPlaylistsService] addVideo(${playlistId}, video: ${video.id})`
+    );
     return new Promise((resolve, reject) => {
-      let url = this.rootUrl + `/users/${user.id}/playlists/${playlistId}/videos`;
-      let params: any = { token: this.login.getToken() };
-      this.http.post(url, video, { params: { token: this.login.getToken() } })
+      this.http
+        .post(
+          `${this.rootUrl}/users/${this.userId}/playlists/${playlistId}/videos`,
+          video,
+          {
+            params: { token: this.token }
+          }
+        )
         .subscribe(
-          () => { resolve(); },
-          (err) => { reject(err); }
+          () => {
+            resolve();
+          },
+          err => {
+            console.log(
+              `[RESTPlaylistsService] addVideo(${playlistId}, video: ${
+                video.id
+              }) ERROR: ` + JSON.stringify(err)
+            );
+            reject(err);
+          }
         );
     });
   }
 
+  removeVideo(playlistId: string, videoId: string): Promise<void> {
+    console.log(
+      `[RESTPlaylistsService] removeVideo(${playlistId}, video: ${videoId})`
+    );
+    return new Promise((resolve, reject) => {
+      this.http
+        .delete(
+          `${this.rootUrl}/users/${
+            this.userId
+          }/playlists/${playlistId}/videos/${videoId}`,
+          {
+            params: { token: this.token }
+          }
+        )
+        .subscribe(
+          () => {
+            resolve();
+          },
+          err => {
+            console.log(
+              `[RESTPlaylistsService] removeVideo(${playlistId}, video: ${videoId}) ERROR: ` +
+                JSON.stringify(err)
+            );
+            reject(err);
+          }
+        );
+    });
+  }
+
+  async listVideos(playlistId: string): Promise<Video[]> {
+    console.log(`[RESTPlaylistsService] listVideos(${playlistId})`);
+
+    let videos: Video[] = await this.http
+      .get<Video[]>(
+        `${this.rootUrl}/users/${this.userId}/playlists/${playlistId}/videos`,
+        {
+          params: { token: this.token }
+        }
+      )
+      .toPromise();
+    let fullVideos = [];
+    for (const video of videos) {
+      if (video.type !== "local") {
+        let videoYT = await this.youtube.findVideoById(video.id);
+        fullVideos.push(videoYT);
+      } else {
+        fullVideos.push(video);
+      }
+    }
+
+    return fullVideos;
+  }
+
+  updateVideos(playlistId: string, videos: Video[]): Promise<Video[]> {
+    console.log(
+      `[RESTPlaylistsService] updateVideos(${playlistId}, videos: ${
+        videos.length
+      })`
+    );
+    return new Promise((resolve, reject) => {
+      this.http
+        .put(
+          `${this.rootUrl}/users/${this.userId}/playlists/${playlistId}/videos`,
+          { videos: videos },
+          {
+            params: { token: this.token }
+          }
+        )
+        .subscribe(
+          () => {
+            resolve();
+          },
+          err => {
+            console.log(
+              `[RESTPlaylistsService] removeVideo(${playlistId}, video: ${
+                videos.length
+              }) ERROR: ` + JSON.stringify(err)
+            );
+            reject(err);
+          }
+        );
+    });
+  }
+
+   
 }

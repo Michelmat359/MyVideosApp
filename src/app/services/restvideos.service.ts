@@ -2,97 +2,135 @@ import { Injectable } from '@angular/core';
 import { UserService } from './user.service';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../models/user';
-import { Video } from '../models/video';
+import { VideosService } from "./videos.service";
+import { Video } from "../models/video";
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class RESTVideosService {
+export class RESTVideosService extends VideosService {
 
   private rootUrl = 'http://localhost:8080/myvideos';
-  constructor(private login: UserService, private http: HttpClient) { }
-  
+  private token: string;
+  private userId: string;
+
+  constructor(private users: UserService, private http: HttpClient) {
+    super();
+    this.token = users.getSessionToken();
+    this.userId = users.getSessionUser().id;
+  }
+
+  findVideos(query: string): Promise<Video[]> {
+    console.log(`[RESTVideosService] findVideos(${query})`);
+    return new Promise((resolve, reject) => {
+      this.http
+        .get(`${this.rootUrl}/users/${this.userId}/videos`, {
+          params: { token: this.token, q: query }
+        })
+        .subscribe(
+          (data: [Video]) => {
+            resolve(data);
+          },
+          err => {
+            console.log(
+              `[RESTVideosService] findVideos(${query}) ERROR: ` +
+                JSON.stringify(err)
+            );
+            reject(err);
+          }
+        );
+    });
+  }
+
+  findVideoById(id: string): Promise<Video> {
+    console.log(`[RESTVideosService] findVideoById(${id})`);
+    return new Promise((resolve, reject) => {
+      this.http
+        .get(`${this.rootUrl}/users/${this.userId}/videos/${id}`, {
+          params: { token: this.token }
+        })
+        .subscribe(
+          (data: Video) => {
+            resolve(data);
+          },
+          err => {
+            console.log(
+              `[RESTVideosService] findVideoById(${id}) ERROR: ` +
+                JSON.stringify(err)
+            );
+            reject(err);
+          }
+        );
+    });
+  }
+
   addVideo(video: Video): Promise<Video> {
-    console.log('[RESTvideosService] addVideo()');
-    let user = this.login.getUser();
+    console.log(`[RESTVideosService] addVideo(${video.title})`);
     return new Promise((resolve, reject) => {
-      let url = this.rootUrl + `/users/${user.id}/videos`;
-      this.http.post(url, video, { params: { token: this.login.getToken() } })
+      this.http
+        .post(
+          `${this.rootUrl}/users/${this.userId}/videos`,
+          video,
+          {
+            params: { token: this.token }
+          }
+        )
         .subscribe(
-          (video: Video) => { resolve(video); },
-          (err) => { reject(err); }
-        );
-    });
-  }
-
-  findVideos(query:string): Promise<Video[]> {
-    console.log(`[RESTvideosService] findVideos`);
-    let user = this.login.getUser();
-    return new Promise((resolve, reject) => {
-      let url = this.rootUrl + `/users/${user.id}/videos`;
-      let params: any = { token: this.login.getToken(), q:query };
-      this.http.get(url, { params: params })
-        .subscribe(
-          (video: Video[]) => { resolve(video); },
-          (err) => { reject(err); }
-        );
-    });
-  }
-
-  /** nuevo */
- findVideoById(id:string): Promise<Video[]> {
-  console.log(`[RESTvideosService] findVideoById(${id})`);
-  let user = this.login.getUser();
-  return new Promise((resolve, reject) => {
-    let url = this.rootUrl + `/users/${user.id}/videos/${id}`;
-    let params: any = { token: this.login.getToken(), videoId:id, userId: user.id };
-    this.http.get(url, { params: params })
-      .subscribe(
-        (video: Video[]) => { resolve(video); },
-        (err) => { reject(err); }
-      );
-  });
-}
-
-  updateVideo(video: Video): Promise<Video> {
-    console.log('[RESTvideosService] updateVideo()');
-    console.log(video);
-    let user = this.login.getUser();
-    return new Promise((resolve, reject) => {
-      let url = this.rootUrl + `/users/${user.id}/videos/${video.id}`;
-      this.http.put(url, video, { params: { token: this.login.getToken() } })
-        .subscribe(
-          (video: Video) => { resolve(video); },
-          (err) => { reject(err); }
+          (data: Video) => {
+            resolve(data);
+          },
+          err => {
+            console.log(
+              `[RESTVideosService] findVideoById(${video.title}) ERROR: ` +
+                JSON.stringify(err)
+            );
+            reject(err);
+          }
         );
     });
   }
 
   removeVideo(id: string): Promise<void> {
-    console.log('[RESTvideosService] removeVideo()');
-    let user = this.login.getUser();
+    console.log(`[RESTVideosService] removeVideo(${id})`);
     return new Promise((resolve, reject) => {
-      let url = this.rootUrl + `/users/${user.id}/videos/${id}`;
-      this.http.delete(url, { params: { token: this.login.getToken() } })
+      this.http
+        .delete(`${this.rootUrl}/users/${this.userId}/videos/${id}`, {
+          params: { token: this.token }
+        })
         .subscribe(
-          () => { resolve(); },
-          (err) => { reject(err); }
+          (data: any) => {
+            resolve();
+          },
+          err => {
+            console.log(
+              `[RESTVideosService] removeVideo(${id}) ERROR: ` +
+                JSON.stringify(err)
+            );
+            reject(err);
+          }
         );
     });
   }
 
-  shareVideo(video: Video): Promise<void> {
-    console.log(`[RESTvideosService] shareVideo(${video.id})`);
-    let user = this.login.getUser();
+  updateVideo(video: Video): Promise<Video> {
+    console.log(`[RESTVideosService] updateVideo(${video.id})`);
     return new Promise((resolve, reject) => {
-      ///myvideos/users/:userId/videos/:videoId/share
-      let url = this.rootUrl + `/users/${user.id}/videos/${video.id}/share`;
-      let params: any = { token: this.login.getToken(), videoId:video.id, userId: user.id };
-      this.http.get(url, { params: params })
+      this.http
+        .put(`${this.rootUrl}/users/${this.userId}/videos/${video.id}`, video, {
+          params: { token: this.token }
+        })
         .subscribe(
-          () => { resolve(); },
-            (err) => { reject(err); }
+          (data: Video) => {
+            resolve(data);
+          },
+          err => {
+            console.log(
+              `[RESTVideosService] updateVideo(${video.id}) ERROR: ` +
+                JSON.stringify(err)
+            );
+            reject(err);
+          }
         );
     });
   }

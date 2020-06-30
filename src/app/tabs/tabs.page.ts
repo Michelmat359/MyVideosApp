@@ -17,9 +17,9 @@ export class TabsPage implements OnInit {
   constructor(private login: UserService, private router: Router,
     private modalCtrl: ModalController, private alertCtrl: AlertController) { }
   ngOnInit() {
-    this.user = this.login.getUser();
+    this.user = this.login.getSessionUser();
     console.log('usuario:');
-    console.log(this.login.getUser());
+    console.log(this.login.getSessionUser());
   }
   editUser() {
     console.log('[TabsPage] editUser()');
@@ -28,7 +28,7 @@ export class TabsPage implements OnInit {
       componentProps: { mode: 'edit', user: this.user }
     }).then((modal) => {
       modal.onDidDismiss()
-        .then((evt) => this.user = this.login.getUser());
+        .then((evt) => this.user = this.login.getSessionUser());
       modal.present();
     });
 

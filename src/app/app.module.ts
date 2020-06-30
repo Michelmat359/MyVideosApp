@@ -21,6 +21,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { PlaylistsService} from './services/playlists.service';
 import { MemoryPlaylistsService } from './services/memory-playlists.service';
 
+import { RESTPlaylistsService } from './services/restplaylist.service';
+import { RESTVideosService } from './services/restvideos.service';
 
 
 
@@ -39,8 +41,10 @@ import { MemoryPlaylistsService } from './services/memory-playlists.service';
     MemoryVideosService,
     MemoryPlaylistsService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    { provide: VideosService, useClass: MemoryVideosService},
-    { provide: PlaylistsService, useClass: MemoryPlaylistsService}
+    //{ provide: VideosService, useClass: MemoryVideosService},
+    { provide: VideosService, useClass: RESTVideosService },
+   // { provide: PlaylistsService, useClass: MemoryPlaylistsService},
+    { provide: PlaylistsService, useClass: RESTPlaylistsService },
   ],
   bootstrap: [AppComponent]
 })
